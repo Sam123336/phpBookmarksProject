@@ -20,25 +20,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_FILES['file_upload']) && $_FILES['file_upload']['error'] == UPLOAD_ERR_OK) {
         $file_tmp_path = $_FILES['file_upload']['tmp_name'];
         $file_name = $_FILES['file_upload']['name'];
-        $file_size = $_FILES['file_upload']['size'];
-        $file_type = $_FILES['file_upload']['type'];
-
-        // Specify the upload directory
-        $upload_dir = '../upload/'; // Ensure this path is correct based on your structure
+        $upload_dir = '../upload/';
         $file_path = $upload_dir . basename($file_name);
 
-        // Move the file to the specified directory
-        if (move_uploaded_file($file_tmp_path, $file_path)) {
-            // File upload successful
-        } else {
+        if (!move_uploaded_file($file_tmp_path, $file_path)) {
             echo "Error uploading file.";
             exit;
         }
     }
 
-    // Insert bookmark into the database
-    $stmt = $pdo->prepare("INSERT INTO bookmarks (user_id, title, url, description, folder, tags, created_at, file_path) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
-    $stmt->execute([$user_id, $title, $url, $description, $folder, $tags, $file_path]);
+    // Check if the folder already exists for the user
+    $stmt = $pdo->prepare("SELECT id FROM folders WHERE user_id = ? AND name = ?");
+    $stmt->execute([$user_id, $folder]);
+    $folder_id = $stmt->fetchColumn();
+
+    if (!$folder_id) {
+        $stmt = $pdo->prepare("INSERT INTO folders (user_id, name) VALUES (?, ?)");
+        $stmt->execute([$user_id, $folder]);
+        $folder_id = $pdo->lastInsertId();
+    }
+
+    $stmt = $pdo->prepare("INSERT INTO bookmarks (user_id, folder_id, title, url, description, tags, created_at, file_path) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
+    $stmt->execute([$user_id, $folder_id, $title, $url, $description, $tags, $file_path]);
 
     header('Location: /project/views/bookmarks_list.php');
     exit;

@@ -11,16 +11,21 @@
     <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 class="text-2xl font-semibold mb-6 text-center">Add Bookmark</h2>
 
+        <!-- Link to go back to bookmarks list -->
+        <div class="text-center mb-4">
+            <a href="/project/views/bookmarks_list.php" class="text-blue-500 hover:underline">View Bookmarks</a>
+        </div>
+
         <form action="/project/php/add_bookmark.php" method="post" enctype="multipart/form-data" class="space-y-4">
             <input type="text" name="title" placeholder="Bookmark Title" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             
-            <input type="url" name="url" placeholder="Bookmark URL" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="url" name="url" placeholder="Bookmark URL" required pattern="https?://.+" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             
             <textarea name="description" placeholder="Description" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             
-            <input type="text" name="folder" placeholder="Folder" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" name="folder" placeholder="Folder (optional)" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             
-            <input type="text" name="tags" placeholder="Tags" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" name="tags" placeholder="Tags (comma-separated)" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             
             <input type="file" name="file_upload" class="w-full text-gray-700">
             

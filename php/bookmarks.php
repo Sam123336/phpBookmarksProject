@@ -33,11 +33,13 @@ $user_id = $_SESSION['user_id'];
 // Fetch bookmarks for the logged-in user
 $stmt = $pdo->prepare("SELECT * FROM bookmarks WHERE user_id = ?");
 $stmt->execute([$user_id]);
-$bookmarks = $stmt->fetchAll();
+$bookmarks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Check if any bookmarks were retrieved
 if (!$bookmarks) {
-    echo "No bookmarks retrieved!";
+    $noBookmarksMessage = "No bookmarks available! Please add some to get started.";
 }
 
-include('../views/bookmarks_list.php');  // Ensure path is correct
+// Include the view for displaying bookmarks
+include('../views/bookmarks_list.php');  // Ensure this path is correct
 ?>

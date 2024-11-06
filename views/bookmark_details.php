@@ -12,6 +12,10 @@ if (!isset($_SESSION['user_id'])) {
 // Get the bookmark ID from the URL
 $bookmark_id = $_GET['id'];
 
+// Update the last accessed timestamp for this bookmark
+$updateTimestampStmt = $pdo->prepare("UPDATE bookmarks SET last_accessed = NOW() WHERE id = ?");
+$updateTimestampStmt->execute([$bookmark_id]);
+
 // Fetch bookmark details from the database
 $stmt = $pdo->prepare("SELECT title, url, description, tags, file_path FROM bookmarks WHERE id = ? AND user_id = ?");
 $stmt->execute([$bookmark_id, $_SESSION['user_id']]);

@@ -12,9 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET['search'])) {
     $search_term = trim($_GET['search']); // Get and trim the search term
     $user_id = $_SESSION['user_id'];
 
-    // Prepare and execute the search query
-    $stmt = $pdo->prepare("SELECT * FROM bookmarks WHERE user_id = ? AND (title LIKE ? OR tags LIKE ?)");
-    $stmt->execute([$user_id, "%$search_term%", "%$search_term%"]);
+    // Prepare and execute the search query, joining folders to include folder names in search
+    $stmt = $pdo->prepare("
+        SELECT bookmarks.*, folders.name AS folder_name 
+        FROM bookmarks 
+        LEFT JOIN folders ON bookmarks.folder_id = folders.id 
+        WHERE bookmarks.user_id = ? 
+        AND (bookmarks.title LIKE ? OR bookmarks.tags LIKE ? OR folders.name LIKE ?)
+    ");
+    $search_pattern = "%$search_term%";
+    $stmt->execute([$user_id, $search_pattern, $search_pattern, $search_pattern]);
     $bookmarks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Include the bookmarks_list.php to display results
@@ -24,3 +31,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET['search'])) {
     header('Location: /project/views/bookmarks_list.php');
     exit;
 }
+?>

@@ -44,13 +44,15 @@ if (isset($_GET['search'])) {
             SELECT b.id, b.title, b.url, b.description, b.tags, b.file_path, f.name AS folder_name
             FROM bookmarks b
             LEFT JOIN folders f ON b.folder_id = f.id
-            WHERE f.user_id = ? AND (b.title LIKE ? OR b.url LIKE ? OR b.description LIKE ? OR b.tags LIKE ?)
+            WHERE f.user_id = ? 
+            AND (b.title LIKE ? OR b.url LIKE ? OR b.description LIKE ? OR b.tags LIKE ? OR f.name LIKE ?)
             ORDER BY f.name
         ");
         $searchWildcard = "%" . $searchTerm . "%";
-        $searchStmt->execute([$user_id, $searchWildcard, $searchWildcard, $searchWildcard, $searchWildcard]);
+        $searchStmt->execute([$user_id, $searchWildcard, $searchWildcard, $searchWildcard, $searchWildcard, $searchWildcard]);
         $searchResults = $searchStmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 }
 
 // Fetch recently used bookmarks
@@ -304,7 +306,7 @@ if (isset($_GET['search'])) {
 <body>
     <!-- Navbar -->
     <nav>
-        <a href="/project/views/home.php">Home</a>
+        <a href="/project/views/bookmarks_list.php">Home</a>
         <a href="/project/views/dashboard.php">Dashboard</a>
         <a href="/project/views/about.php">About</a>
         <a href="/project/views/new.php">New</a>

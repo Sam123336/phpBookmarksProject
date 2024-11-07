@@ -2,23 +2,34 @@
 include('config.php');
 session_start();
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /project/views/login_form.php');
-    exit;
-}
+// Check if the 'share_link' parameter is present
+if (isset($_GET['share_link'])) {
+    // Get the encoded share link
+    $shareLink = $_GET['share_link'];
 
-// Get the folder name and mark it as public
-if (isset($_POST['folder_name'])) {
-    $folderName = $_POST['folder_name'];
-    $userId = $_SESSION['user_id'];
+    // Decode the share link
+    $decodedLink = urldecode($shareLink);
 
-    // Update the folder to set it as public
-    $stmt = $pdo->prepare("UPDATE folders SET public = 1 WHERE name = ? AND user_id = ?");
-    $stmt->execute([$folderName, $userId]);
+    // Ensure the decoded link is correct and points to folder.php
+    if (strpos($decodedLink, 'folder.php') !== false) {
+        // Extract the token from the query string of the decoded URL
+        parse_str(parse_url($decodedLink, PHP_URL_QUERY), $params);
+        $token = $params['token'] ?? null;
 
-    // Redirect back to the bookmarks list
-    header('Location: /project/views/bookmarks_list.php');
+        // If the token exists, proceed with redirecting to folder.php
+        if ($token) {
+            header("Location: /project/views/folder.php?token=" . $token);
+            exit;
+        } else {
+            echo "Invalid token.";
+            exit;
+        }
+    } else {
+        echo "Invalid share link.";
+        exit;
+    }
+} else {
+    echo "Share link parameter not found.";
     exit;
 }
 ?>

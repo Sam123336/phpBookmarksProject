@@ -4,12 +4,44 @@ include('../php/config.php');
 session_start();
 
 // Fetch public folders with their bookmarks from the database
+// $stmt = $pdo->prepare("
+//     SELECT f.name AS folder_name, f.id AS folder_id, b.id AS bookmark_id, b.title, b.url, b.description, b.tags, b.file_path
+//     FROM folders f
+//     LEFT JOIN bookmarks b ON f.id = b.folder_id
+//     WHERE f.public = 1
+//     ORDER BY f.name
+// ");
+// $stmt->execute();
+// $publicFolders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// // Group bookmarks by folder for easy display
+// $foldersGrouped = [];
+// foreach ($publicFolders as $row) {
+//     $folderId = $row['folder_id'];
+//     if (!isset($foldersGrouped[$folderId])) {
+//         $foldersGrouped[$folderId] = [
+//             'folder_name' => $row['folder_name'],
+//             'bookmarks' => []
+//         ];
+//     }
+//     if ($row['bookmark_id']) {
+//         $foldersGrouped[$folderId]['bookmarks'][] = [
+//             'title' => $row['title'],
+//             'url' => $row['url'],
+//             'description' => $row['description'],
+//             'tags' => $row['tags'],
+//             'file_path' => $row['file_path']
+//         ];
+//     }
+// }
 $stmt = $pdo->prepare("
-    SELECT f.name AS folder_name, f.id AS folder_id, b.id AS bookmark_id, b.title, b.url, b.description, b.tags, b.file_path
-    FROM folders f
-    LEFT JOIN bookmarks b ON f.id = b.folder_id
-    WHERE f.public = 1
-    ORDER BY f.name
+ SELECT f.name AS folder_name, f.id AS folder_id, b.id AS bookmark_id, b.title, b.url, b.description, b.tags, b.file_path, u.username AS creator_name
+FROM folders f
+LEFT JOIN bookmarks b ON f.id = b.folder_id
+LEFT JOIN users u ON f.user_id = u.id
+WHERE f.public = 1
+ORDER BY f.name;
+
 ");
 $stmt->execute();
 $publicFolders = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,6 +53,7 @@ foreach ($publicFolders as $row) {
     if (!isset($foldersGrouped[$folderId])) {
         $foldersGrouped[$folderId] = [
             'folder_name' => $row['folder_name'],
+            'creator_name' => $row['creator_name'],
             'bookmarks' => []
         ];
     }
@@ -34,6 +67,8 @@ foreach ($publicFolders as $row) {
         ];
     }
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -175,8 +210,72 @@ foreach ($publicFolders as $row) {
         text-align: center;
         padding: 20px;
     }
+       /* Search bar styling */
+       .search-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .search-bar {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+        font-size: 1em;
+        border-radius: 5px;
+        border: 1px solid #555;
+        background-color: #222;
+        color: #ff8a5c;
+    }
+    .creator-name {
+        font-size: 0.9em;
+        color: #ccc;
+        margin-top: 5px;
+        text-align: center;
+    }
+    .add-comment form {
+    margin-top: 20px;
+}
+.add-comment textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: #444;
+    color: #ff8a5c;
+    border: 1px solid #555;
+    border-radius: 5px;
+}
+.add-comment button {
+    margin-top: 10px;
+    background-color: #ff8a5c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.add-comment button:hover {
+    background-color: #ffb37e;
+}
+.icon-small {
+        width: 16px; /* Adjust the width to your preference */
+        height: 16px; /* Adjust the height to your preference */
+    }
 </style>
 
+<!-- <script>
+function toggleBookmarks(folderId) {
+    const bookmarksList = document.getElementById(bookmarks-${folderId});
+    if (bookmarksList.classList.contains("open")) {
+        bookmarksList.classList.remove("open");
+        bookmarksList.style.maxHeight = '0';
+    } else {
+        document.querySelectorAll('.bookmark-list').forEach(list => {
+            list.classList.remove("open");
+            list.style.maxHeight = '0';
+        });
+        bookmarksList.classList.add("open");
+        bookmarksList.style.maxHeight = ${bookmarksList.scrollHeight}px;
+    }
+}
+</script> -->
 <script>
 function toggleBookmarks(folderId) {
     const bookmarksList = document.getElementById(`bookmarks-${folderId}`);
@@ -189,7 +288,42 @@ function toggleBookmarks(folderId) {
             list.style.maxHeight = '0';
         });
         bookmarksList.classList.add("open");
-        bookmarksList.style.maxHeight = `${bookmarksList.scrollHeight}px`;
+        bookmarksList.style.maxHeight = bookmarksList.scrollHeight + 'px';
+    }
+}
+
+
+function filterFoldersAndBookmarks() {
+    const query = document.getElementById('search-input').value.toLowerCase();
+    document.querySelectorAll('.folder-card').forEach(folder => {
+        const folderName = folder.querySelector('.folder-name').textContent.toLowerCase();
+        let folderMatches = folderName.includes(query);
+
+        // Check if any bookmarks in this folder match
+        const bookmarks = folder.querySelectorAll('.bookmark-item');
+        let bookmarkMatches = false;
+        bookmarks.forEach(bookmark => {
+            const title = bookmark.querySelector('.bookmark-title').textContent.toLowerCase();
+            const description = bookmark.querySelector('.bookmark-description').textContent.toLowerCase();
+            const tags = bookmark.querySelector('.bookmark-tags').textContent.toLowerCase();
+            if (title.includes(query) || description.includes(query) || tags.includes(query)) {
+                bookmark.style.display = 'block';
+                bookmarkMatches = true;
+            } else {
+                bookmark.style.display = 'none';
+            }
+        });
+
+        // Show/hide the folder based on matches
+        folder.style.display = folderMatches || bookmarkMatches ? 'block' : 'none';
+    });
+}
+function toggleComments(folderId) {
+    const commentsSection = document.getElementById(`comments-${folderId}`);
+    if (commentsSection.style.display === "none") {
+        commentsSection.style.display = "block";
+    } else {
+        commentsSection.style.display = "none";
     }
 }
 </script>
@@ -200,12 +334,34 @@ function toggleBookmarks(folderId) {
 <!-- Page Content -->
 <div class="container">
     <h1 class="dashboard-title">Public Folders</h1>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <input type="text" id="search-input" class="search-bar" placeholder="Search folders or bookmarks..." oninput="filterFoldersAndBookmarks()">
+    </div>
+
     <?php if (!empty($foldersGrouped)): ?>
         <div class="folders">
             <?php foreach ($foldersGrouped as $folderId => $folder): ?>
                 <div class="folder-card" onclick="toggleBookmarks(<?php echo $folderId; ?>)" tabindex="0" aria-expanded="false">
                     <h2 class="folder-name"><?php echo htmlspecialchars($folder['folder_name']); ?></h2>
+                    
+                    <p class="creator-name">Created by: <?php echo htmlspecialchars($folder['creator_name']); ?></p>
 
+
+        <!-- Export Button -->
+        <form action="/project/php/export_folder.php" method="post" style="display:inline;">
+            <input type="hidden" name="folder_name" value="<?php echo htmlspecialchars($folder['folder_name']); ?>">
+            <button type="submit" class="button">
+                <img src="/project/images/export.png" alt="Export" class="icon-small">
+            </button>
+        </form>
+                <!-- Share Button -->
+<form action="/project/php/generate_share_link.php" method="post" style="display:inline;">
+    <input type="hidden" name="folder_id" value="<?php echo $folderId; ?>">
+    <button type="submit" class="button">
+        <img src="/project/images/share.png" alt="Share" class="icon-small">
+    </button>
+</form>
                     <ul class="bookmark-list" id="bookmarks-<?php echo $folderId; ?>">
                         <?php if (!empty($folder['bookmarks'])): ?>
                             <?php foreach ($folder['bookmarks'] as $bookmark): ?>
@@ -228,7 +384,38 @@ function toggleBookmarks(folderId) {
                             <p class="no-bookmarks">No bookmarks in this folder.</p>
                         <?php endif; ?>
                     </ul>
-                </div>
+                    <h3 class="comments-toggle" onclick="toggleComments(<?php echo $folderId; ?>)"><img src="/project/images/comment.png" alt="" class="icon-small"></h3>
+                    <div class="comments-section" id="comments-<?php echo $folderId; ?>" style="display: none;">
+    <div class="existing-comments">
+        <?php
+        $stmt_comments = $pdo->prepare("SELECT c.comment_text, u.username 
+                                        FROM comments c
+                                        JOIN users u ON c.user_id = u.id
+                                        WHERE c.folder_id = :folder_id
+                                        ORDER BY c.created_at DESC");
+        $stmt_comments->execute(['folder_id' => $folderId]);
+        $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($comments)):
+            foreach ($comments as $comment): ?>
+                <p><strong><?php echo htmlspecialchars($comment['username']); ?>:</strong> <?php echo htmlspecialchars($comment['comment_text']); ?></p>
+            <?php endforeach;
+        else: ?>
+            <p>No comments yet. Be the first to comment!</p>
+        <?php endif; ?>
+    </div>
+
+    <!-- Comment Form -->
+    <div class="add-comment">
+    <form action="../php/add_comment.php" method="POST">
+        <input type="hidden" name="folder_id" value="<?php echo $folderId; ?>">
+        <textarea name="comment_text" rows="2" placeholder="Add a comment..." required></textarea>
+        <button type="submit">Post Comment</button>
+    </form>
+</div>
+        </div>
+        
+</div>
             <?php endforeach; ?>
         </div>
     <?php else: ?>
@@ -236,4 +423,4 @@ function toggleBookmarks(folderId) {
     <?php endif; ?>
 </div>
 </body>
-</html>
+</html> 

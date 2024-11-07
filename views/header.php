@@ -13,7 +13,7 @@
             <h1 class="text-3xl font-bold">Bookmark Manager</h1>
             <nav>
                 <ul class="flex space-x-4 mt-2">
-                    <li><a href="index.php" class="hover:underline">Home</a></li>
+                    <li><a href="bookmarks_list.php" class="hover:underline">Home</a></li>
                     <li><a href="add_bookmark.php" class="hover:underline">Add Bookmark</a></li>
                     <li><a href="bookmarks.php" class="hover:underline">View Bookmarks</a></li>
                     <?php if (isset($_SESSION['user_id'])): ?>

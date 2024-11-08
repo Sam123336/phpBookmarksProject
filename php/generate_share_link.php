@@ -1,6 +1,7 @@
 <?php
 // Include database configuration
 include('config.php');
+session_start();
 
 // Get folder ID from the request
 $folderId = $_POST['folder_id'];
@@ -24,13 +25,14 @@ if ($folder && empty($folder['share_token'])) {
     $shareToken = $folder['share_token']; // Use existing token if it exists
 }
 
-// Get the current base URL dynamically
-$baseUrl = "http://" . $_SERVER['HTTP_HOST']; // For localhost or live server
-
 // Generate the full shareable link
+$baseUrl = "http://" . $_SERVER['HTTP_HOST']; // For localhost or live server
 $shareLink = $baseUrl . "/project/views/folder.php?token=" . $shareToken;
 
-// Redirect back to the page with the share link
-header("Location: ../views/public_folders.php?share_link=" . urlencode($shareLink));
+// Store the share link in a session variable to be accessed on the main page
+$_SESSION['share_link'] = $shareLink;
+
+// Redirect back to the main page where the share link can be displayed
+header("Location: ../views/dashboard.php");
 exit;
 ?>

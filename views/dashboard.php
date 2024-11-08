@@ -258,6 +258,23 @@ foreach ($publicFolders as $row) {
         width: 16px; /* Adjust the width to your preference */
         height: 16px; /* Adjust the height to your preference */
     }
+    .share-link-notification {
+    background-color: #444;
+    color: #ff8a5c;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.share-link-notification a {
+    color: #ffb37e;
+    text-decoration: underline;
+}
+.share-link-notification a:hover {
+    color: #ff8a5c;
+}
+
 </style>
 
 <!-- <script>
@@ -330,6 +347,13 @@ function toggleComments(folderId) {
 
 <!-- Navbar -->
 <?php include('../views/navbar.php'); ?>
+<?php
+if (isset($_SESSION['share_link'])) {
+    $shareLink = $_SESSION['share_link'];
+    echo "<div class='share-link-notification'>Share link created: <a href='$shareLink' target='_blank'>$shareLink</a></div>";
+    unset($_SESSION['share_link']); // Clear the share link after displaying
+}
+?>
 
 <!-- Page Content -->
 <div class="container">

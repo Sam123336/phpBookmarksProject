@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="../output.css"> <!-- Link to Tailwind CSS output file -->
+    <!-- <link rel="stylesheet" href="../output.css"> Link to Tailwind CSS output file -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             background-color: #2c3e50; /* Dark background for the whole page */

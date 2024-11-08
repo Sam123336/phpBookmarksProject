@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="../output.css"> <!-- Link to Tailwind CSS output file -->
+    <!-- <link rel="stylesheet" href="../output.css"> Link to Tailwind CSS output file -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
@@ -72,7 +73,7 @@
 
         .form-container a:hover {
             color: #ff8a5c;
-            text-decoration: underline;
+            text-deco<script src="https://cdn.tailwindcss.com"></script>ration: underline;
         }
     </style>
 </head>

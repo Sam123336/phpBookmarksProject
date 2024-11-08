@@ -384,7 +384,7 @@ if (isset($_GET['search'])) {
                             </form>
                              <!-- New "Make Public" Button -->
                                           <!-- New "Make Public" Button -->
-                        <form action="/project/php/public_folder.php" method="post" style="display:inline;">
+                        <form action="/project/php/toggle_public.php" method="post" style="display:inline;">
                             <input type="hidden" name="folder_name" value="<?php echo htmlspecialchars($folder); ?>">
                             <button type="submit" class="button"><img src="/project/images/public.png" alt="" class="icon-small"></button>
                         </form>

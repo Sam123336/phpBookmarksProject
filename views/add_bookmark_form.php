@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Bookmark</title>
-    <link rel="stylesheet" href="../output.css"> <!-- Link to Tailwind CSS output file -->
+    <!-- <link rel="stylesheet" href="../output.css"> Link to Tailwind CSS output file -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Additional custom styles */
         body {
@@ -79,7 +80,7 @@
             
             <textarea name="description" placeholder="Description" class="form-textarea"></textarea>
             
-            <input type="text" name="folder" placeholder="Folder (optional)" class="form-input">
+            <input type="text" name="folder" placeholder="Folder (required)" required class="form-input">
             
             <input type="text" name="tags" placeholder="Tags (comma-separated)" class="form-input">
             

@@ -156,21 +156,23 @@ if (isset($_GET['search'])) {
 
 
 /* Buttons and Inputs */
+
+/* Buttons and Inputs */
 .button, .delete-folder-button, .edit-bookmark-btn, .delete-bookmark-btn {
     text-decoration: none;
-    background-color: #0000ff;
-    border: none;
+    background-color:#707070;/* Make background transparent */
+    border: none; /* Remove border */
     color: #ffffff;
-    padding: 6px 12px; /* Smaller button size */
+    padding: 6px 12px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-size: 12px; /* Smaller font size */
+    font-size: 12px;
 }
 
 .button:hover, .delete-folder-button:hover, .edit-bookmark-btn:hover, .delete-bookmark-btn:hover {
-    text-decoration: none;
-    background-color: #ff4a4a;
+    background-color:  #555555; /* Keep hover background transparent */
+    color: #ff4a4a; /* Optionally change text color on hover */
 }
 
 .top-bar {

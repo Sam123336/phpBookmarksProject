@@ -4,13 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="../output.css">
-     <!-- Link to Tailwind CSS output file -->
-</head>
-<body class="bg-gray-100 text-gray-900 font-sans flex items-center justify-center min-h-screen">
+    <link rel="stylesheet" href="../output.css"> <!-- Link to Tailwind CSS output file -->
+    <style>
+        body {
+            background-color: #2c3e50; /* Dark background for the whole page */
+            font-family: 'Arial', sans-serif;
+        }
 
-    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-semibold mb-6 text-center">Register</h2>
+        .form-container {
+            background-color: #34495e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            color: #ecf0f1;
+        }
+
+        .form-container h2 {
+            color: #e67e22;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            background-color: #3c4f68;
+            color: #ecf0f1;
+            border: 1px solid #455a64;
+        }
+
+        .form-container input:focus {
+            outline: none;
+            border-color: #e67e22;
+            box-shadow: 0 0 5px rgba(231, 126, 34, 0.5);
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #e67e22;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #f39c12;
+        }
+
+        .form-container p {
+            text-align: center;
+            margin-top: 1rem;
+            color: #bdc3c7;
+        }
+
+        .form-container a {
+            color: #5b9dd1;
+        }
+
+        .form-container a:hover {
+            color: #e67e22;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="form-container">
+        <h2>Register</h2>
 
         <form action="/project/php/register.php" method="POST" class="space-y-4">
             <div>

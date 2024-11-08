@@ -1,18 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="../output.css">
-
-
-  
-<meta charset="UTF-8">
+    <link rel="stylesheet" href="../output.css"> <!-- Link to Tailwind CSS output file -->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <style>
+        body {
+            background-color: #1f1f2e;
+            font-family: 'Arial', sans-serif;
+        }
 
-    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
+        .form-container {
+            background-color: #333;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            color: #e5e5e5;
+        }
+
+        .form-container h2 {
+            color: #ff8a5c;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            background-color: #444;
+            color: #e5e5e5;
+            border: 1px solid #555;
+        }
+
+        .form-container input:focus {
+            outline: none;
+            border-color: #ff8a5c;
+            box-shadow: 0 0 5px rgba(255, 138, 92, 0.5);
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #ff8a5c;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #ffb37e;
+        }
+
+        .form-container p {
+            text-align: center;
+            margin-top: 1rem;
+            color: #ccc;
+        }
+
+        .form-container a {
+            color: #5b9dd1;
+        }
+
+        .form-container a:hover {
+            color: #ff8a5c;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="form-container">
+        <h2>Login</h2>
         <form action="/project/php/login.php" method="post" class="space-y-4">
             <div>
                 <label class="block text-gray-600">Email</label>

@@ -3,37 +3,7 @@
 include('../php/config.php');
 session_start();
 
-// Fetch public folders with their bookmarks from the database
-// $stmt = $pdo->prepare("
-//     SELECT f.name AS folder_name, f.id AS folder_id, b.id AS bookmark_id, b.title, b.url, b.description, b.tags, b.file_path
-//     FROM folders f
-//     LEFT JOIN bookmarks b ON f.id = b.folder_id
-//     WHERE f.public = 1
-//     ORDER BY f.name
-// ");
-// $stmt->execute();
-// $publicFolders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// // Group bookmarks by folder for easy display
-// $foldersGrouped = [];
-// foreach ($publicFolders as $row) {
-//     $folderId = $row['folder_id'];
-//     if (!isset($foldersGrouped[$folderId])) {
-//         $foldersGrouped[$folderId] = [
-//             'folder_name' => $row['folder_name'],
-//             'bookmarks' => []
-//         ];
-//     }
-//     if ($row['bookmark_id']) {
-//         $foldersGrouped[$folderId]['bookmarks'][] = [
-//             'title' => $row['title'],
-//             'url' => $row['url'],
-//             'description' => $row['description'],
-//             'tags' => $row['tags'],
-//             'file_path' => $row['file_path']
-//         ];
-//     }
-// }
 $stmt = $pdo->prepare("
  SELECT f.name AS folder_name, f.id AS folder_id, b.id AS bookmark_id, b.title, b.url, b.description, b.tags, b.file_path, u.username AS creator_name
 FROM folders f
@@ -274,25 +244,31 @@ foreach ($publicFolders as $row) {
 .share-link-notification a:hover {
     color: #ff8a5c;
 }
+.button {
+        background-color: : #555555;
+        color: white;
+        padding: 10px 20px;
+        border: 1px solid #ff8a5c;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
+    .button:hover {
+        background-color: #707070;
+    
+        transform: scale(1.05);
+    }
+
+    .button:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 138, 92, 0.7);
+    }
 </style>
 
-<!-- <script>
-function toggleBookmarks(folderId) {
-    const bookmarksList = document.getElementById(bookmarks-${folderId});
-    if (bookmarksList.classList.contains("open")) {
-        bookmarksList.classList.remove("open");
-        bookmarksList.style.maxHeight = '0';
-    } else {
-        document.querySelectorAll('.bookmark-list').forEach(list => {
-            list.classList.remove("open");
-            list.style.maxHeight = '0';
-        });
-        bookmarksList.classList.add("open");
-        bookmarksList.style.maxHeight = ${bookmarksList.scrollHeight}px;
-    }
-}
-</script> -->
+
+
 <script>
 function toggleBookmarks(folderId) {
     const bookmarksList = document.getElementById(`bookmarks-${folderId}`);

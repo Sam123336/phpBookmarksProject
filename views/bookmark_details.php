@@ -34,14 +34,69 @@ if (!$bookmark) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($bookmark['title']); ?> - Details</title>
     <link rel="stylesheet" href="../output.css">
+    <style>
+        /* Additional styling */
+        body {
+            background-color: #1f1f2e;
+            color: #e5e5e5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .content {
+            background-color: #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        h2 {
+            color: #ff8a5c;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .bookmark-description, p {
+            font-size: 16px;
+            margin: 8px 0;
+        }
+        a {
+            color: #ffb37e;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #ffd4a3;
+        }
+        .bookmark-file {
+            color: #ff8a5c;
+            font-weight: bold;
+        }
+        .bookmark-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h2><?php echo htmlspecialchars($bookmark['title']); ?></h2>
-    <p><strong>URL:</strong> <a href="<?php echo htmlspecialchars($bookmark['url']); ?>" target="_blank"><?php echo htmlspecialchars($bookmark['url']); ?></a></p>
-    <p><strong>Description:</strong> <?php echo htmlspecialchars($bookmark['description']); ?></p>
-    <p><strong>Tags:</strong> <?php echo htmlspecialchars($bookmark['tags']); ?></p>
-    <?php if ($bookmark['file_path']): ?>
-        <p><strong>File:</strong> <a href="<?php echo htmlspecialchars($bookmark['file_path']); ?>" download>Download</a></p>
-    <?php endif; ?>
+    <div class="content">
+        <h2><?php echo htmlspecialchars($bookmark['title']); ?></h2>
+        <p><strong>URL:</strong> <a href="<?php echo htmlspecialchars($bookmark['url']); ?>" target="_blank"><?php echo htmlspecialchars($bookmark['url']); ?></a></p>
+        <p class="bookmark-description"><?php echo htmlspecialchars($bookmark['description']); ?></p>
+        <p><strong>Tags:</strong> <?php echo htmlspecialchars($bookmark['tags']); ?></p>
+        
+        <?php if (!empty($bookmark['file_path'])): ?>
+            <p>File: <a href="/project/uploads/<?php echo htmlspecialchars($bookmark['file_path']); ?>" target="_blank" class="bookmark-file"><?php echo htmlspecialchars($bookmark['file_path']); ?></a></p>
+            <?php if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $bookmark['file_path'])): ?>
+                <img src="/project/uploads/<?php echo htmlspecialchars($bookmark['file_path']); ?>" alt="<?php echo htmlspecialchars($bookmark['title']); ?>" class="bookmark-image">
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
 </body>
 </html>
